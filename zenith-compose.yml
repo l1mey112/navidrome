@@ -1,0 +1,38 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    restart: unless-stopped
+    read_only: true
+    ports:
+      - "4533"
+    volumes:
+      - navidrome_data:/data
+      - music:/music:ro
+
+volumes:
+  navidrome_data: {}
+  music: {}
+
+x-zenith:
+  catalog:
+    name: Navidrome
+    description: Open source web-based music collection server and streamer.
+    authors: [Navidrome contributors]
+    tags: [music, streaming]
+    source: https://github.com/navidrome/navidrome
+    license: GPL-3.0
+  expose:
+    - service: navidrome
+      port: 4533
+      web: true
+  storage:
+    data:
+      volume: navidrome_data
+      label: Application data
+      description: Navidrome database and configuration data.
+      public: false
+    music:
+      volume: music
+      label: Music library
+      description: Music collection scanned and served by Navidrome.
+      public: true
